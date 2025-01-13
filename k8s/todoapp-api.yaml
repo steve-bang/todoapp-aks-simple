@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todoapp-api-deployment
+  labels:
+    app: todoapp-api-label
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: todoapp-api-label
+  template:
+    metadata:
+      labels:
+        app: todoapp-api-label
+    spec:
+      containers:
+      - name: todoapp-api-container
+        image: mrstevebang/todoapp-api:1.0.11
+        ports:
+        - containerPort: 80
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Development"  # Set the environment to Development
+        - name: ASPNETCORE_URLS
+          value: "http://*:80"  # Ensure the app binds to all IPs
+        - name: ConnectionStrings__DefaultConnection
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: connectionstring
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todoapp-api-service
+spec:
+  selector:
+    app: todoapp-api-label
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer

@@ -1,0 +1,25 @@
+@ToDoApi_HostAddress = http://127.0.0.1:64179/api/todos
+
+GET {{ToDoApi_HostAddress}}
+Accept: application/json
+
+###
+
+
+POST {{ToDoApi_HostAddress}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name":"Test 5"
+}
+
+###
+POST {{ToDoApi_HostAddress}}/81d36d33-0061-4e14-9eab-930ac6859206/completed
+Accept: application/json
+Content-Type: application/json
+
+###
+DELETE {{ToDoApi_HostAddress}}/c947146e-b3ca-4fb3-b285-82e2511d68f2
+Accept: application/json
+Content-Type: application/json

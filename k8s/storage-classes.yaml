@@ -1,0 +1,24 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: db-storage
+provisioner: disk.csi.azure.com  # Storage provisioner for Azure Disk CSI driver
+parameters:
+  type: io1  # High IOPS disk type for database workloads
+  iopsPerGb: "100"  # Number of IOPS per GB for performance tuning
+reclaimPolicy: Retain  # Data is retained when PVC is deleted
+volumeBindingMode: WaitForFirstConsumer  # Binding happens only when a pod requests storage
+
+
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: high-speed-file-storage
+provisioner: kubernetes.io/aws-ebs  # Storage provisioner for AWS Elastic Block Store
+parameters:
+  type: gp3  # General-purpose SSD storage type for better throughput
+  fsType: ext4  # Filesystem type for storage
+reclaimPolicy: Delete  # Data is deleted when PVC is deleted
+volumeBindingMode: Immediate  # PV is bound to PVC as soon as it is created
+
